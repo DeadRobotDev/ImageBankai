@@ -1,6 +1,7 @@
 package com.imagebankai;
 
 import net.runelite.client.RuneLite;
+import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.components.ImageComponent;
@@ -22,9 +23,12 @@ public class ImageOverlay extends OverlayPanel
 	private ImageOverlay(ImageBankaiPlugin plugin, ImageBankaiConfig config)
 	{
 		super(plugin);
-		setPosition(OverlayPosition.TOP_LEFT);
-		setPriority(PRIORITY_LOW);
+
 		_config = config;
+
+		setPriority(PRIORITY_LOW);
+		setPosition(OverlayPosition.TOP_LEFT);
+		setLayer(OverlayLayer.ABOVE_WIDGETS);
 	}
 
 	@Override
