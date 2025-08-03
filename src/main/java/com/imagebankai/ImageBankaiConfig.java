@@ -8,46 +8,24 @@ import net.runelite.client.config.ConfigItem;
 public interface ImageBankaiConfig extends Config
 {
 	@ConfigItem(
-			keyName = "width",
-			name = "Width",
-			description = "The width of the image, in pixels",
+			keyName = "min",
+			name = "Min Width",
+			description = "The min width of the image, in pixels",
 			position = 1
 	)
-	default int width()
+	default int minWidth()
 	{
 		return 100;
 	}
 
 	@ConfigItem(
-			keyName = "height",
-			name = "Height",
-			description = "The height of the image, in pixels",
+			keyName = "minHeight",
+			name = "Min Height",
+			description = "The min height of the image, in pixels",
 			position = 2
 	)
-	default int height()
+	default int minHeight()
 	{
 		return 100;
-	}
-
-	@ConfigItem(
-			keyName = "scalingMode",
-			name = "Scaling Mode",
-			description = "",
-			position = 3
-	)
-	default ResizeMode scalingMode()
-	{
-		return ResizeMode.Bilinear;
-	}
-
-	@ConfigItem(
-			keyName = "antialias",
-			name = "Anti-Aliasing",
-			description = "",
-			position = 4
-	)
-	default boolean antiAliasEnabled()
-	{
-		return false;
 	}
 }

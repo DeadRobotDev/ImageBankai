@@ -5,6 +5,7 @@ import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.components.ImageComponent;
+import net.runelite.client.util.ImageUtil;
 
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
@@ -46,7 +47,7 @@ public class ImageOverlay extends OverlayPanel
 				return null;
 			}
 
-			Image = resizeImage(OriginalImage, _config.width(), _config.height(), _config.scalingMode(), _config.antiAliasEnabled());
+			Image = resizeImage(OriginalImage);
 			updateImage = false;
 		}
 
@@ -73,62 +74,12 @@ public class ImageOverlay extends OverlayPanel
 		}
 	}
 
-	private BufferedImage resizeImage(BufferedImage in, int targetWidth, int targetHeight, ResizeMode scalingMode, boolean antiAliasEnabled)
+	private BufferedImage resizeImage(BufferedImage in)
 	{
-		var currentHeight = in.getHeight();
-		var currentWidth = in.getWidth();
+		var maxWidth = _config.minWidth();
+		var maxHeight = _config.minHeight();
 
-		Dimension currentDimension = new Dimension(currentWidth, currentHeight);
-		Dimension targetDimension = new Dimension(targetWidth, targetHeight);
-
-		Dimension scaledDimension = getScaledDimension(currentDimension, targetDimension);
-
-		int type = in.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : in.getType();
-
-		BufferedImage scaledImage = new BufferedImage(
-				scaledDimension.width,
-				scaledDimension.height,
-				type
-		);
-
-		Object scalingHint = null;
-		switch (scalingMode)
-		{
-			case NearestNeighbour:
-				scalingHint = RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR;
-				break;
-			case Bicubic:
-				scalingHint = RenderingHints.VALUE_INTERPOLATION_BICUBIC;
-				break;
-			default:
-				scalingHint = RenderingHints.VALUE_INTERPOLATION_BILINEAR;
-				break;
-		}
-
-		Object antiAliasHint = antiAliasEnabled
-				? RenderingHints.VALUE_ANTIALIAS_ON
-				: RenderingHints.VALUE_ANTIALIAS_OFF;
-
-		Graphics2D g2d = scaledImage.createGraphics();
-
-		g2d.setComposite(AlphaComposite.Src);
-		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, scalingHint);
-		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, antiAliasHint);
-		g2d.drawImage(in, 0, 0, scaledDimension.width, scaledDimension.height, null);
-		g2d.dispose();
-
-		return scaledImage;
-	}
-
-	private Dimension getScaledDimension(Dimension imageSize, Dimension boundary)
-	{
-		double widthRatio = boundary.getWidth() / imageSize.getWidth();
-		double heightRatio = boundary.getHeight() / imageSize.getHeight();
-
-		double ratio = Math.min(widthRatio, heightRatio);
-
-		return new Dimension((int) (imageSize.width * ratio), (int) (imageSize.height * ratio));
+		return ImageUtil.resizeImage(in, maxWidth, maxHeight, true);
 	}
 }
 
