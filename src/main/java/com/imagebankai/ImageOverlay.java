@@ -13,16 +13,19 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
 
 public class ImageOverlay extends OverlayPanel
 {
 	private static final File CUSTOM_IMAGE_FILE = new File(RuneLite.RUNELITE_DIR, "profile.png");
 
 	private final ImageBankaiConfig _config;
+	private final BufferedImage ErrorImage;
 
-	private BufferedImage OriginalImage;
+	private BufferedImage CustomImage;
 	private BufferedImage Image;
-	private boolean updateImage;
+	private Instant nextCheck;
+	private boolean configChanged;
 
 	@Inject
 	private ImageOverlay(ImageBankaiPlugin plugin, ImageBankaiConfig config)
@@ -34,21 +37,26 @@ public class ImageOverlay extends OverlayPanel
 		setPriority(PRIORITY_LOW);
 		setPosition(OverlayPosition.TOP_LEFT);
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
+
+		ErrorImage = loadErrorImage();
 	}
 
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		if (OriginalImage == null || updateImage)
+		if (shouldLoadCustomImage())
 		{
-			OriginalImage = loadImage();
-			if (OriginalImage == null)
+			CustomImage = loadCustomImage();
+			if (CustomImage == null)
 			{
-				return null;
+				Image = resizeImage(ErrorImage);
+				nextCheck = Instant.now().plusSeconds(1);
+			} else
+			{
+				Image = resizeImage(CustomImage);
 			}
 
-			Image = resizeImage(OriginalImage);
-			updateImage = false;
+			configChanged = false;
 		}
 
 		ImageComponent imageComponent = new ImageComponent(Image);
@@ -60,10 +68,31 @@ public class ImageOverlay extends OverlayPanel
 
 	public void onConfigChanged()
 	{
-		updateImage = true;
+		configChanged = true;
 	}
 
-	private BufferedImage loadImage()
+	private BufferedImage loadErrorImage()
+	{
+		return ImageUtil.loadImageResource(ImageBankaiPlugin.class, "/no_image.png");
+	}
+
+	private boolean shouldLoadCustomImage()
+	{
+		if (configChanged)
+		{
+			return true;
+		}
+
+		if (CustomImage != null)
+		{
+			return false;
+		}
+
+		var currentTime = Instant.now();
+		return nextCheck == null || currentTime.isAfter(nextCheck);
+	}
+
+	private BufferedImage loadCustomImage()
 	{
 		try
 		{
