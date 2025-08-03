@@ -38,18 +38,14 @@ public class ImageOverlay extends OverlayPanel
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		if (OriginalImage == null)
+		if (OriginalImage == null || updateImage)
 		{
 			OriginalImage = loadImage();
 			if (OriginalImage == null)
 			{
 				return null;
 			}
-			updateImage = true;
-		}
 
-		if (updateImage)
-		{
 			Image = resizeImage(OriginalImage, _config.width(), _config.height(), _config.scalingMode(), _config.antiAliasEnabled());
 			updateImage = false;
 		}
