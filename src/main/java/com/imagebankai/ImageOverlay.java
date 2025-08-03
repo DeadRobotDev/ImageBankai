@@ -49,11 +49,15 @@ public class ImageOverlay extends OverlayPanel
 			CustomImage = loadCustomImage();
 			if (CustomImage == null)
 			{
-				Image = resizeImage(ErrorImage);
+				if (nextCheck == null || configChanged)
+				{
+					Image = resizeImage(ErrorImage);
+				}
 				nextCheck = Instant.now().plusSeconds(1);
 			} else
 			{
 				Image = resizeImage(CustomImage);
+				nextCheck = null;
 			}
 
 			configChanged = false;
