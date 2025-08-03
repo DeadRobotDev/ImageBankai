@@ -4,7 +4,7 @@ import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 
-@ConfigGroup("imagebankai")
+@ConfigGroup("ImageBankai")
 public interface ImageBankaiConfig extends Config
 {
 	@ConfigItem(

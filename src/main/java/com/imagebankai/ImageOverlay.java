@@ -19,7 +19,9 @@ public class ImageOverlay extends OverlayPanel
 
 	private final ImageBankaiConfig _config;
 
+	private BufferedImage OriginalImage;
 	private BufferedImage Image;
+	private boolean updateImage;
 
 	@Inject
 	private ImageOverlay(ImageBankaiPlugin plugin, ImageBankaiConfig config)
@@ -36,24 +38,33 @@ public class ImageOverlay extends OverlayPanel
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		if (Image == null)
+		if (OriginalImage == null)
 		{
-			Image = loadImage();
-			if (Image == null)
+			OriginalImage = loadImage();
+			if (OriginalImage == null)
 			{
 				return null;
 			}
+			updateImage = true;
 		}
 
-		var image = resizeImage(Image, _config.width(), _config.height(), _config.scalingMode(), _config.antiAliasEnabled());
+		if (updateImage)
+		{
+			Image = resizeImage(OriginalImage, _config.width(), _config.height(), _config.scalingMode(), _config.antiAliasEnabled());
+			updateImage = false;
+		}
 
-		ImageComponent imageComponent = new ImageComponent(image);
+		ImageComponent imageComponent = new ImageComponent(Image);
 
 		panelComponent.getChildren().add(imageComponent);
 
 		return super.render(graphics);
 	}
 
+	public void onConfigChanged()
+	{
+		updateImage = true;
+	}
 
 	private BufferedImage loadImage()
 	{
