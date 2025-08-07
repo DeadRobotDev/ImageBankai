@@ -7,3 +7,6 @@ Place a file named profile.png in %userprofile%\\.runelite\ on Windows or ~/.run
 Once the plugin finds an image, it saves it in memory. Simply changing profile.png won’t update what you see.
 
 To reload the image, change any plugin setting, such as increasing and decreasing "Min Width" by 1.
+
+## Nameplate
+To create a full nameplate, combine with a plugin like RHUD that displays your name, health, and prayer: https://runelite.net/plugin-hub/show/rasta-hud
