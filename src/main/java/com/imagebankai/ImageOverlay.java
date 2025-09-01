@@ -18,6 +18,7 @@ import java.time.Instant;
 public class ImageOverlay extends OverlayPanel
 {
 	private static final File CUSTOM_IMAGE_FILE = new File(RuneLite.RUNELITE_DIR, "profile.png");
+	private static final File CUSTOM_IMAGE_FILE_FIX = new File(RuneLite.RUNELITE_DIR, "profile.png.png");
 
 	private final ImageBankaiConfig _config;
 	private final BufferedImage ErrorImage;
@@ -100,7 +101,13 @@ public class ImageOverlay extends OverlayPanel
 	{
 		try
 		{
-			return ImageIO.read(ImageOverlay.CUSTOM_IMAGE_FILE);
+			var image = ImageIO.read(ImageOverlay.CUSTOM_IMAGE_FILE);
+			if (image != null)
+			{
+				return image;
+			}
+
+			return ImageIO.read(ImageOverlay.CUSTOM_IMAGE_FILE_FIX);
 		} catch (IOException e)
 		{
 			return null;
