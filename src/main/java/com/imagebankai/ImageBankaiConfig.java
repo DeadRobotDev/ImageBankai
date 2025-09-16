@@ -36,4 +36,12 @@ public interface ImageBankaiConfig extends Config
 			position = 3
 	)
 	default boolean transparentBackground() { return false; }
+
+	@ConfigItem(
+			keyName = "overlayMode",
+			name = "Overlay Mode",
+			description = "Behind Interfaces displays behind interfaces, i.e bank and map. Always On Top displays above everything.",
+			position = 4
+	)
+	default OverlayMode overlayMode() { return OverlayMode.Default; }
 }

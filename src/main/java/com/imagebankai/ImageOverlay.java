@@ -70,6 +70,21 @@ public class ImageOverlay extends OverlayPanel
 				panelComponent.setBackgroundColor(ComponentConstants.STANDARD_BACKGROUND_COLOR);
 			}
 
+			switch (_config.overlayMode()) {
+				case Default: {
+					setLayer(OverlayLayer.ABOVE_WIDGETS);
+					break;
+				}
+				case BehindInterface: {
+					setLayer(OverlayLayer.ABOVE_SCENE);
+					break;
+				}
+				case AlwaysOnTop: {
+					setLayer(OverlayLayer.ALWAYS_ON_TOP);
+					break;
+				}
+			}
+
 			configChanged = false;
 		}
 
