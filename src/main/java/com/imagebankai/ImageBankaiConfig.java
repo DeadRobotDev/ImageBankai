@@ -28,4 +28,12 @@ public interface ImageBankaiConfig extends Config
 	{
 		return 100;
 	}
+
+	@ConfigItem(
+			keyName = "transparentBackground",
+			name = "Transparent Background",
+			description = "If enabled, will have a transparent background. By default, uses Overlay color set in RuneLite plugin.",
+			position = 3
+	)
+	default boolean transparentBackground() { return false; }
 }

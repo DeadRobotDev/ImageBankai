@@ -4,6 +4,7 @@ import net.runelite.client.RuneLite;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
+import net.runelite.client.ui.overlay.components.ComponentConstants;
 import net.runelite.client.ui.overlay.components.ImageComponent;
 import net.runelite.client.util.ImageUtil;
 
@@ -59,6 +60,14 @@ public class ImageOverlay extends OverlayPanel
 			{
 				Image = resizeImage(CustomImage);
 				nextCheck = null;
+			}
+
+			if (_config.transparentBackground())
+			{
+				panelComponent.setBackgroundColor(new Color(0, 0, 0, 0));
+			} else
+			{
+				panelComponent.setBackgroundColor(ComponentConstants.STANDARD_BACKGROUND_COLOR);
 			}
 
 			configChanged = false;
